@@ -4,6 +4,7 @@ import br.com.fiap.resource.CorsFilter;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,8 +27,10 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in br.com.fiap package
-    final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.resource");
-    rc.register(CorsFilter.class);
+        final ResourceConfig rc = new ResourceConfig()
+            .packages("br.com.fiap.resource")
+            .register(CorsFilter.class)
+            .register(JacksonFeature.class);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
