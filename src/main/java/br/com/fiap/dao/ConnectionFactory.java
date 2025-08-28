@@ -30,15 +30,32 @@ public class ConnectionFactory {
             return result;
         }
         Properties prop = new Properties();
-        FileInputStream file = null;
+        boolean loaded = false;
         try {
-            file = new FileInputStream("./src/main/resources/application.properties");
-            prop.load(file);
-            String url = prop.getProperty("datasource.url");
-            String user = prop.getProperty("datasource.username");
-            String pass = prop.getProperty("datasource.password");
-            String driver = prop.getProperty("datasource.driver-class-name");
-            file.close();
+            // Tenta carregar do classpath
+            java.io.InputStream input = ConnectionFactory.class.getClassLoader().getResourceAsStream("application.properties");
+            if (input != null) {
+                prop.load(input);
+                loaded = true;
+                input.close();
+            }
+            // Se não achou, tenta pelo caminho absoluto (Docker)
+            if (!loaded) {
+                java.io.File file = new java.io.File("/app/application.properties");
+                if (file.exists()) {
+                    java.io.FileInputStream fis = new java.io.FileInputStream(file);
+                    prop.load(fis);
+                    loaded = true;
+                    fis.close();
+                }
+            }
+            if (!loaded) {
+                throw new FileNotFoundException("application.properties não encontrado no classpath nem em /app");
+            }
+            String url = prop.getProperty("db.url");
+            String user = prop.getProperty("db.user");
+            String pass = prop.getProperty("db.password");
+            String driver = prop.getProperty("db.driver");
             if (instance == null) {
                 instance = new ConnectionFactory(url, user, pass, driver);
             }

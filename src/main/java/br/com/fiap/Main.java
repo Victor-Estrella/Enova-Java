@@ -14,7 +14,7 @@ import java.net.URI;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/";
+    public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     //in br.com.fiap package
     final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.resource");
@@ -46,7 +46,11 @@ public class Main {
         System.out.println(String.format("Jersey app started with endpoints available at "
                 + "%s%nHit Ctrl-C to stop it...", BASE_URI));
         System.in.read();
-        server.stop();
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            server.stop();
+        }
     }
 }
 
