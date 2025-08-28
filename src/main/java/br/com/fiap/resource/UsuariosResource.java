@@ -17,15 +17,14 @@ public class UsuariosResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll(){
-        ArrayList<UsuariosTO> resultado = usuariosBO.findAll();
-        Response.ResponseBuilder response = null;
-        if (resultado != null){
-            response = Response.ok(); // 200 (Ok)
-        } else {
-            response = Response.status(404);
+        try {
+            ArrayList<UsuariosTO> resultado = usuariosBO.findAll();
+            if (resultado == null) resultado = new ArrayList<>();
+            return Response.ok(resultado).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(500).entity("Erro interno: " + e.getMessage()).build();
         }
-        response.entity(resultado);
-        return response.build();
     }
     @GET
     @Path("/{id_usuario}")
