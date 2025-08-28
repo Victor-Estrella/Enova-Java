@@ -18,6 +18,7 @@ public class Main {
 
     //in br.com.fiap package
     final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.resource");
+    rc.register(CorsFilter.class);
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
