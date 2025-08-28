@@ -16,9 +16,7 @@ public class Main {
     // Base URI the Grizzly HTTP server will listen on
     public static final String BASE_URI = "http://0.0.0.0:8080/";
 
-    //in br.com.fiap package
-    final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.resource");
-    rc.register(CorsFilter.class);
+    // ...existing code...
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -28,8 +26,8 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in br.com.fiap package
-        final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap");
-        rc.register(CorsFilter.class);
+    final ResourceConfig rc = new ResourceConfig().packages("br.com.fiap.resource");
+    rc.register(CorsFilter.class);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
